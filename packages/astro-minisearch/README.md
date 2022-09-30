@@ -64,10 +64,16 @@ After configuring this plugin and adding the following line to your page or layo
 ...you may see some output like this (obviously with your own content):
 
 ```js
-{
-  "": "Welcome to Astro! This is the docs starter template. ...",
-  "getting-started": "Getting Started To get started with this theme, ..."
-}
+[
+  [
+    "",
+    "Welcome to Astro! This is the docs starter template...."
+  ],
+  [
+    "Getting Started",
+    "To get started with this theme, check out the README.md..."
+  ]
+]
 ```
 
 Configuration success! Congratulations.
@@ -153,25 +159,29 @@ The plaintext plugin will not overwrite manually specified plaintext properties.
 
 To replace the text, you can specify the plaintext value as a string, like this:
 
-```md
----
+```yml
 plainText: All about the aardvark.
----
+```
 
+```markdown
 This page is about a certain burrowing mammal native to Africa.
 ```
 
-If your page has multiple sections, you can use a YAML object where the key is the ID of each heading.
-Text that comes at the top can be a blank string. For example:
+If your page has multiple sections, you can use a YAML array of arrays.
+Each sub item in the list has a header first, then the rest of the text after.
+The "header" for text that comes before any headers can be a blank string. For example:
 
-```md
----
+```yml
 plainText:
-  '': This is the top of the page.
-  section-1: Section 1 Here is some content for section 1. 
-  section-2: Section 2 Here is other text for section 2. 
----
+- - ''
+  - This is the top of the page
+- - Section 1
+  - Here is some content for section 1.
+- - Section 2
+  - This is other text for section 2.
+```
 
+```markdown
 This is the top of the page.
 
 ## Section 1
@@ -180,15 +190,11 @@ Here is some content for section 1.
 
 ## Section 2
 
-Here is other text for section 2.
+This is other text for section 2.
 ```
 
 To prevent a page from being added to the search index, set the plaintext field to false or a blank string.
 
-```md
----
+```yml
 plainText: false
----
-
-This page won't be searchable!
 ```

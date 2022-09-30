@@ -4,8 +4,8 @@ import { SearchDocument, SearchIndexOptions } from "./types.js";
 
 const defaultOptions: SearchIndexOptions = {
   idField: "url",
-  fields: ["title", "text"],
-  storeFields: ["title"],
+  fields: ["title", "heading", "text"],
+  storeFields: ["title", "heading"],
 };
 
 

@@ -25,12 +25,14 @@ export type PlaintextPluginOptions = {
 
 export type SearchIndexOptions = MiniSearchOptions<SearchDocument>;
 
-export type Frontmatter = {
-  title: string;
-};
-
 export type SearchDocument = {
   url?: string;
+  heading?: string;
   title: string;
   text: string;
 };
+
+// internal type for assembling document sections
+export type Section = { heading: string; text: string };
+
+

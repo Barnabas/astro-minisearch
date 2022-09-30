@@ -23,10 +23,13 @@ test("output tree when headings found", () => {
   );
 
   const tree = toPlaintextTree(doc, opts);
-  assert.is(Object.keys(tree).length, 3);
-  assert.is(tree[""], "This is text at the top");
-  assert.is(tree["heading-a"], "Heading A Text under A");
-  assert.is(tree["heading-b"], "Heading B Text under B Heading C Text under C");
+  assert.is(tree.length, 3);
+  assert.is(tree[0][0], "");
+  assert.is(tree[0][1], "This is text at the top");
+  assert.is(tree[1][0], "Heading A");
+  assert.is(tree[1][1], "Text under A");
+  assert.is(tree[2][0], "Heading B");
+  assert.is(tree[2][1], "Text under B Heading C Text under C");
 });
 
 test("output string when no headings", () => {
