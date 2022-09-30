@@ -1,4 +1,4 @@
-import MiniSearch, { AsPlainObject } from "minisearch";
+import MiniSearch from "minisearch";
 
 import { SearchDocument, SearchIndexOptions } from "./types.js";
 
@@ -19,7 +19,10 @@ export function generateIndex(
   return miniSearch;
 }
 
-export function loadIndex(json: AsPlainObject, options?: SearchIndexOptions) {
+export function loadIndex(json: string | any, options?: SearchIndexOptions) {
   const opts: SearchIndexOptions = { ...defaultOptions, ...options };
+  if(typeof json === "string") {
+    return MiniSearch.loadJSON(json, opts);
+  }
   return MiniSearch.loadJS(json, opts);
 }

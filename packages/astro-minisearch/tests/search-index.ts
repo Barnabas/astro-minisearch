@@ -1,9 +1,8 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { generateIndex } from "../src/search-index";
+import { generateIndex, loadIndex } from "../src/search-index";
 
 test("generateIndex", () => {
-  assert.type(generateIndex, "function");
   const index = generateIndex([]);
   assert.is(index.documentCount, 0);
 });
@@ -36,6 +35,34 @@ test("search", () => {
 
   const result4 = index.search("aardvark");
   assert.ok(result4.length === 0, "should have no results");
+});
+
+test("loadIndex", () => {
+  const index = generateIndex([
+    { title: "Test 1", url: "test1", text: "abc 123" },
+  ]);
+
+  const jsonObj = index.toJSON();
+  const jsonStr = JSON.stringify(jsonObj);
+
+  assert.match(jsonStr, "abc");
+
+  const index1 = loadIndex(jsonObj);
+  assert.is(
+    index.documentCount,
+    index1.documentCount,
+    "index from json object"
+  );
+
+  const index2 = loadIndex(jsonStr);
+  assert.is(
+    index.documentCount,
+    index2.documentCount,
+    "index from json string"
+  );
+
+  assert.throws(() => loadIndex("{}"), /cannot deserialize/);
+  assert.throws(() => loadIndex({}), /cannot deserialize/);
 });
 
 test.run();
