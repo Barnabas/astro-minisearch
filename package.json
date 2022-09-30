@@ -1,4 +1,7 @@
 {
     "name": "astro-minisearch-monorepo",
-    "private": true
+    "private": true,
+    "devDependencies": {
+        "@changesets/cli": "^2.24.4"
+    }
 }
