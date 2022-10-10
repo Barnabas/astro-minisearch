@@ -1,7 +1,7 @@
 {
   "name": "@barnabask/astro-minisearch",
   "description": "Utilities to add a static full text index to an Astro project",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "author": {
     "name": "Barnabas Kendall",
