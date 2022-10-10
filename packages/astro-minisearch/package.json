@@ -1,12 +1,30 @@
 {
   "name": "@barnabask/astro-minisearch",
+  "description": "Utilities to add a static full text index to an Astro project",
   "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Barnabas Kendall",
+    "url": "https://barnabas.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Barnabas/astro-minisearch.git",
+    "directory": "packages/astro-minisearch"
+  },
+  "homepage": "https://github.com/Barnabas/astro-minisearch/",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
+  "keywords": [
+    "search",
+    "full text",
+    "minisearch",
+    "astro"
+  ],
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "tsc",

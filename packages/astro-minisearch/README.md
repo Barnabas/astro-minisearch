@@ -1,4 +1,4 @@
-# astro-minisearch
+# @barnabask/astro-minisearch
 
 This package adds MiniSearch support to your Astro project.
 It contains a rehype plugin that helps extract text from Markdown and MDX files.
