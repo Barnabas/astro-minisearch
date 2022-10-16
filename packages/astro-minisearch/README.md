@@ -136,7 +136,7 @@ if (query) {
   const searchIndex = loadIndex(searchData);
   results = searchIndex.search(query);
 }
---
+---
 <form action="search" method="GET">
   <input type="text" name="query" />
   <button type="submit">Search</button>
