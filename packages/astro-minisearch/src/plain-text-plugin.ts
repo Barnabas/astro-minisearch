@@ -31,7 +31,7 @@ export async function mapGlobResult(
       const { url, frontmatter } = await getInfo();
 
       // Make sure the result of glob is the right shape
-      if (!url) throw new Error("missing url");
+      if (typeof url !== "string") throw new Error("missing url");
       if (!frontmatter) throw new Error("missing frontmatter");
 
       const { [contentKey]: textData, ...other } = frontmatter;
