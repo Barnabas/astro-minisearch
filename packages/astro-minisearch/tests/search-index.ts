@@ -65,4 +65,11 @@ test("loadIndex", () => {
   assert.throws(() => loadIndex({}), /cannot deserialize/);
 });
 
+test("generateIndex with blank URL", () => {
+  const index = generateIndex([
+    { title: "home", url: "", text: "introduction paragraph here" },
+  ]);
+  assert.is(index.documentCount, 1);
+});
+
 test.run();
