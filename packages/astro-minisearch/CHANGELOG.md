@@ -1,5 +1,12 @@
 # @barnabask/astro-minisearch
 
+## 1.1.1
+
+### Patch Changes
+
+- 310bfb9: bug: fix [error "missing url"](https://github.com/Barnabas/astro-minisearch/issues/2)
+  by ensuring that URL is a string, not truthy. Thanks @mrienstra!
+
 ## 1.1.0
 
 ### Minor Changes
