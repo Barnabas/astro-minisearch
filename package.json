@@ -2,9 +2,11 @@
     "name": "astro-minisearch-monorepo",
     "private": true,
     "scripts": {
-        "build": "pnpm -r --filter='./packages/*' run build"
+        "build": "pnpm -r --filter='./packages/*' run build",
+        "publish": "pnpm -r --filter='./packages/*' publish",
+        "test": "pnpm -r --filter='./packages/*' run test"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.24.4"
+        "@changesets/cli": "^2.26.0"
     }
 }
