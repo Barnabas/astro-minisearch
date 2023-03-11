@@ -38,3 +38,16 @@ export type SearchDocument = {
 
 // internal type for assembling document sections
 export type Section = { heading: string; text: string };
+
+// based on what's inside "astro:content", which we can't get at here
+export interface ContentEntry {
+  slug: string;
+  render: () => Promise<{
+    headings: {
+      depth: number;
+      slug: string;
+      text: string;
+    }[];
+    remarkPluginFrontmatter: Record<string, any>;
+  }>;
+}
