@@ -23,7 +23,8 @@
     "search",
     "full text",
     "minisearch",
-    "astro"
+    "astro",
+    "astro-component"
   ],
   "scripts": {
     "clean": "rm -rf ./dist",
@@ -31,18 +32,18 @@
     "test": "uvu -r tsm tests"
   },
   "devDependencies": {
-    "@types/github-slugger": "^1.3.0",
-    "astro": "^1.4.0",
-    "hast-util-from-html": "^1.0.0",
-    "tsm": "^2.2.2",
-    "typescript": "^4.8.4",
+    "astro": "^2.1.2",
+    "hast-util-from-html": "^1.0.1",
+    "tsm": "^2.3.0",
+    "typescript": "^4.9.5",
     "uvu": "^0.5.6"
   },
   "dependencies": {
     "emoji-regex": "^10.2.1",
-    "github-slugger": "^1.4.0",
-    "hast-util-to-text": "^3.1.1",
-    "minisearch": "^5.0.0",
-    "unist-util-visit": "^4.1.1"
+    "github-slugger": "^2.0.0",
+    "hast-util-to-text": "^3.1.2",
+    "minisearch": "^6.0.1",
+    "unist-util-visit": "^4.1.2",
+    "zod": "^3.21.4"
   }
 }
