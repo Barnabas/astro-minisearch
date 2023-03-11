@@ -1,13 +1,14 @@
 import type { EndpointOutput } from "astro";
 import Slugger from "github-slugger";
 
-import { plainTextPlugin, mapGlobResult } from "./plain-text-plugin.js";
+import { plainTextPlugin } from "./plain-text-plugin.js";
+import { pagesGlobToDocuments } from "./pages";
 import { generateIndex, loadIndex } from "./search-index.js";
 import {
   SearchDocument,
   GlobResult,
   SearchIndexOptions,
-  PlaintextPluginOptions,
+  PluginOptions,
 } from "./types.js";
 
 type SearchIndexItems =
@@ -21,11 +22,14 @@ function isGlobResult(items: SearchIndexItems): items is GlobResult {
 
 export async function getDocuments(
   items: SearchIndexItems,
-  options?: PlaintextPluginOptions
+  options?: PluginOptions
 ): Promise<SearchDocument[]> {
-  const documents = await (isGlobResult(items)
-    ? mapGlobResult(items, options)
-    : items);
+  let documents: SearchDocument[] = [];
+  if(isGlobResult(items)) {
+    documents = await pagesGlobToDocuments(items, options);
+  } else {
+    documents = await items;
+  }
   const sluggers = new Map<string, Slugger>();
 
   return documents.map((document) => {
@@ -44,7 +48,7 @@ export async function getDocuments(
 
 export async function getSearchIndex(
   items: SearchIndexItems,
-  options?: SearchIndexOptions & PlaintextPluginOptions
+  options?: SearchIndexOptions & PluginOptions
 ): Promise<EndpointOutput> {
   const documents = await getDocuments(items, options);
   const index = generateIndex(documents, options);
@@ -52,4 +56,4 @@ export async function getSearchIndex(
   return { body: JSON.stringify(index) };
 }
 
-export { generateIndex, loadIndex, plainTextPlugin };
+export { generateIndex, loadIndex, plainTextPlugin, pagesGlobToDocuments };

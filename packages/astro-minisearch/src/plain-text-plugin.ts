@@ -1,70 +1,20 @@
-import { HastNode, HastElement, toText } from "hast-util-to-text";
+import { toText } from "hast-util-to-text";
+import { Root, Element } from "hast-util-to-text/lib/index.js";
 import { visit } from "unist-util-visit";
 import EmojiRegex from "emoji-regex";
 
 import {
   AstroRehypePlugin,
-  GlobResult,
-  PlaintextPluginOptions,
-  SearchDocument,
+  PluginOptions,
   Section,
+  pluginOptionValidator,
 } from "./types.js";
-
-const defaultOptions = {
-  contentKey: "plainText",
-  removeEmoji: true,
-  headingTags: ["h2", "h3"],
-};
 
 const emojiRegex = EmojiRegex();
 
-export async function mapGlobResult(
-  items: GlobResult,
-  options?: PlaintextPluginOptions
-): Promise<SearchDocument[]> {
-  const documents: SearchDocument[] = [];
-  const opts: PlaintextPluginOptions = { ...defaultOptions, ...options };
-  const contentKey = opts.contentKey || defaultOptions.contentKey;
-
-  await Promise.all(
-    Object.values(items).map(async (getInfo) => {
-      const { url, frontmatter } = await getInfo();
-
-      // Make sure the result of glob is the right shape
-      if (typeof url !== "string") throw new Error("missing url");
-      if (!frontmatter) throw new Error("missing frontmatter");
-
-      const { [contentKey]: textData, ...other } = frontmatter;
-      let sections: Section[] = [];
-
-      if (!textData) {
-        return;
-      } else if (typeof textData === "string") {
-        // if plain text was a simple string, treat like an object with null key
-        sections = [{ heading: "", text: textData }];
-      } else if (Array.isArray(textData)) {
-        sections = textData.map(([heading, text]) => {
-          return { heading, text };
-        });
-      }
-
-      const newDocs: SearchDocument[] = sections.map(({ heading, text }) => {
-        return { url, heading, text, ...other };
-      });
-      documents.push(...newDocs);
-    })
-  );
-  return documents;
-}
-
-/* As of Astro v1.4.0, rehype plugins do not yet have a document tree with headings that have IDs. 
-  As far as we're concerned, the internal function rehypeCollectHeadings (in 
-  astro/packages/markdown/remark/src/rehype-collect-headings.ts) has not run yet.
-*/
-
 export function toPlaintextTree(
-  tree: HastNode,
-  options: PlaintextPluginOptions
+  tree: Root,
+  options: Partial<PluginOptions>
 ): string[][] | string {
   const headingTags = options.headingTags || [];
   const sections: Section[] = [];
@@ -88,7 +38,7 @@ export function toPlaintextTree(
 
   visit(tree, ["element", "text"], (node) => {
     if (node.type === "element") {
-      const el = node as HastElement;
+      const el = node as Element;
       if (headingTags.includes(el.tagName)) {
         let heading = toText(node);
         if (!heading) return;
@@ -112,12 +62,12 @@ export function toPlaintextTree(
   return output.length === 1 && output[0][0] === "" ? output[0][1] : output;
 }
 
-export function plainTextPlugin(options?: PlaintextPluginOptions) {
-  const opts: PlaintextPluginOptions = { ...defaultOptions, ...options };
-  const contentKey = opts.contentKey || defaultOptions.contentKey;
+export function plainTextPlugin(options?: Partial<PluginOptions>) {
+  const opts: PluginOptions = pluginOptionValidator.parse(options);
+  const contentKey = opts.contentKey;
 
   return function plugin(): AstroRehypePlugin {
-    return (tree: HastNode, { data }) => {
+    return (tree: Root, { data }) => {
       if (!data || !data.astro || !data.astro.frontmatter) return;
       const frontmatter = data.astro.frontmatter;
       if (frontmatter[contentKey] === undefined) {
