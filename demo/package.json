@@ -1,29 +1,19 @@
 {
-  "name": "@example/docs",
+  "name": "demo",
   "type": "module",
-  "version": "0.0.4",
-  "private": true,
+  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "check": "astro check && tsc",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@algolia/client-search": "^4.14.2",
-    "@astrojs/preact": "^1.1.1",
-    "@astrojs/react": "^1.1.4",
-    "@barnabask/astro-minisearch": "workspace:*",
-    "@docsearch/css": "^3.2.1",
-    "@docsearch/react": "^3.2.1",
-    "@types/node": "^18.7.23",
-    "@types/react": "^17.0.50",
-    "@types/react-dom": "^18.0.6",
-    "astro": "^1.4.0",
-    "preact": "^10.11.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@astrojs/mdx": "^0.17.2",
+    "@astrojs/rss": "^2.1.1",
+    "@astrojs/sitemap": "^1.1.0",
+    "@barnabask/astro-minisearch": "workspace:^1.1.1",
+    "astro": "^2.0.18"
   }
 }

@@ -1,0 +1,14 @@
+---
+let { date } = Astro.props;
+if(!date || !date.toISOString) date = new Date();
+---
+
+<time datetime={date.toISOString()}>
+	{
+		date.toLocaleDateString('en-us', {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric',
+		})
+	}
+</time>

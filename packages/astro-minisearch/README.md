@@ -30,8 +30,7 @@ import { plainTextPlugin } from "@barnabask/astro-minisearch";
 export default defineConfig({
   site: "http://example.com",
   markdown: {
-    rehypePlugins: [plainTextPlugin()],
-    extendDefaultPlugins: true,
+    rehypePlugins: [plainTextPlugin()]
   },
 });
 ```
@@ -82,37 +81,50 @@ Configuration success! Congratulations.
 
 Create a `search.json.js` file under your `src/pages/` directory.
 The output page will be called `search.json` but you can rename it or move it if you want.
-In that file, import the `getSearchIndex` function and call the function like this:
+Here's an example that fetches local static markdown files and two Astro content collections and then outputs a search index:
 
 ```js
-import { getSearchIndex } from "@barnabask/astro-minisearch";
+import { getCollection } from "astro:content";
+import {
+  getSearchIndex,
+  pagesGlobToDocuments,
+  collectionToDocuments,
+} from "@barnabask/astro-minisearch";
 
-export const get = () => getSearchIndex(import.meta.glob(`./**/*.md*`));
+export async function get() {
+  const articlesCollection = getCollection("articles");
+  const blogCollection = getCollection("blog");
+
+  const [articleDocs, blogDocs, pageDocs] = await Promise.all([
+    pagesGlobToDocuments(import.meta.glob(`./**/*.md*`)),
+    collectionToDocuments(articlesCollection, "/articles/"),
+    collectionToDocuments(blogCollection, "/blog/"),
+  ]);
+
+  return getSearchIndex([...articleDocs, ...blogDocs, ...pageDocs]);
+}
 ```
 
-The `getSearchIndex` function takes two arguments.
-The first argument can be either an `import.meta.glob` result or an array of documents.
-The second optional argument is [the MiniSearch options](https://lucaong.github.io/minisearch/modules/_minisearch_.html#options).
+The function `pagesGlobToDocuments` converts a the output of [`import.meta.glob`] to search documents.
 
-If instead of the glob method you want to manually specify an array of documents to index,
-be sure to specify a `url`, `title`, and `text` field for each item.
-A similar example to above:
+The function `collectionToDocuments` converts a the output of [`getCollection`] to search documents.
+There are two arguments:
 
-```js
-import { getSearchIndex } from "@barnabask/astro-minisearch";
-const postImportResult = import.meta.glob('../posts/**/*.md', { eager: true });
-const posts = Object.values(postImportResult);
+1. An array of [`CollectionEntry`] items, which is the resolved output of `getCollection`, and
+2. The absolute root URL where the collection will be rendered
 
-export const get = () => getSearchIndex(
-  posts.map((post) => ({
-    url: post.url,
-    title: post.frontmatter.title,
-    text: post.frontmatter.plainText,
-  }))
-);
-```
+The function `getSearchIndex` outputs search index JSON and takes two arguments:
 
-This was meant to feel familiar to people with experience with [`@astro/rss`](https://docs.astro.build/en/guides/rss/).
+1. An array of search documents, and
+2. [MiniSearch options] (optional)
+
+If, instead of the conversion methods above, you want to manually specify an array of search documents to index,
+be sure to specify at least the properties `url`, `title`, and `text` field for each item.
+
+[`import.meta.glob`]: https://vitejs.dev/guide/features.html#glob-import
+[`getCollection`]: https://docs.astro.build/en/reference/api-reference/#getcollection
+[`CollectionEntry`]: https://docs.astro.build/en/reference/api-reference/#collection-entry-type
+[MiniSearch options]: https://lucaong.github.io/minisearch/modules/_minisearch_.html#options
 
 ## Next steps
 

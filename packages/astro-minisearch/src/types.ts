@@ -1,27 +1,31 @@
-import type { HastNode } from "hast-util-to-text";
+import { Root } from "hast-util-to-text/lib";
 import { Options as MiniSearchOptions } from "minisearch";
+import { z } from "zod";
 
 // from withastro/astro/packages/astro-rss/src/index.ts
-export type GlobResult = Record<string, () => Promise<{ [key: string]: any }>>;
+const globResultValidator = z.record(z.function().returns(z.promise(z.any())));
+export type GlobResult = z.infer<typeof globResultValidator>;
 
 export interface AstroVFile {
   data: { astro: { frontmatter: Record<string, any> } };
 }
 
-export type AstroRehypePlugin = (tree: HastNode, file: AstroVFile) => void;
+export type AstroRehypePlugin = (tree: Root, file: AstroVFile) => void;
 
-export type PlaintextPluginOptions = {
+export type PluginOptions = z.infer<typeof pluginOptionValidator>;
+
+export const pluginOptionValidator = z.object({
   /** Frontmatter property to store plain text output, default "plainText". */
-  contentKey?: string;
+  contentKey: z.string().default("plainText"),
 
   /** If true, strip emoji out of text */
-  removeEmoji?: boolean;
+  removeEmoji: z.boolean().default(true),
 
   /** Tags to consider headings and make separate search documents.
    * Default = ["h2", "h3"]
    */
-  headingTags?: string[]; 
-};
+  headingTags: z.array(z.string()).default(["h2", "h3"]),
+});
 
 export type SearchIndexOptions = MiniSearchOptions<SearchDocument>;
 
@@ -35,4 +39,15 @@ export type SearchDocument = {
 // internal type for assembling document sections
 export type Section = { heading: string; text: string };
 
-
+// based on what's inside "astro:content", which we can't get at here
+export interface ContentEntry {
+  slug: string;
+  render: () => Promise<{
+    headings: {
+      depth: number;
+      slug: string;
+      text: string;
+    }[];
+    remarkPluginFrontmatter: Record<string, any>;
+  }>;
+}

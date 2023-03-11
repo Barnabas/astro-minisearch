@@ -1,8 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 import { fromHtml } from "hast-util-from-html";
-import { toPlaintextTree, mapGlobResult } from "../src/plain-text-plugin";
-import { GlobResult } from "../src/types";
+import { toPlaintextTree } from "../src/plain-text-plugin";
 
 const opts = { headingTags: ["h2", "h3"] };
 
@@ -56,14 +55,5 @@ test("remove or keep emoji", () => {
   const text2 = toPlaintextTree(doc, { removeEmoji: false });
   assert.is(text2, "Emoji (⌚ 🧑‍🚀 ✅)");
 });
-
-test("mapGlobResult", async () => {
-  const fakeGlobResult: GlobResult = {
-    "index.md": async () => ({ url: "", frontmatter: { plainText: "hi" } }),
-  };
-
-  const docs = await mapGlobResult(fakeGlobResult);
-  assert.is(docs.length, 1);
-})
 
 test.run();
