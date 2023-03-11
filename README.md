@@ -15,7 +15,7 @@ Here's what's inside:
 ## Development
 
 This project is using [changesets](https://github.com/changesets/changesets).
-For now it is manual.
+When submitting a PR, be sure to add a changeset describing the change.
 
 ### New changesets
 
@@ -24,9 +24,4 @@ Answer the questions and commit temp files to the `.changeset` directory.
 
 ### Releases
 
-From the root project directory:
-
-1. `pnpm changeset version` - bump versions and update changelog files
-2. `pnpm install` - update lockfile
-3. `pnpm build`
-4. `pnpm publish -r`
+Releases are automatically handled by GitHub actions whenever a PR is merged.
