@@ -1,7 +1,7 @@
 {
   "name": "demo",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -13,7 +13,7 @@
     "@astrojs/mdx": "^0.17.2",
     "@astrojs/rss": "^2.1.1",
     "@astrojs/sitemap": "^1.1.0",
-    "@barnabask/astro-minisearch": "workspace:^1.1.1",
+    "@barnabask/astro-minisearch": "workspace:^2.0.0",
     "astro": "^2.0.18"
   }
 }
