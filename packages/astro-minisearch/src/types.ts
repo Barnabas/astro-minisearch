@@ -4,7 +4,7 @@ import { z } from "zod";
 
 // from withastro/astro/packages/astro-rss/src/index.ts
 const globResultValidator = z.record(z.function().returns(z.promise(z.any())));
-export type GlobResult =  z.infer<typeof globResultValidator>;
+export type GlobResult = z.infer<typeof globResultValidator>;
 
 export interface AstroVFile {
   data: { astro: { frontmatter: Record<string, any> } };
@@ -24,8 +24,8 @@ export const pluginOptionValidator = z.object({
   /** Tags to consider headings and make separate search documents.
    * Default = ["h2", "h3"]
    */
-  headingTags: z.array(z.string()).default(["h2", "h3"])
-})
+  headingTags: z.array(z.string()).default(["h2", "h3"]),
+});
 
 export type SearchIndexOptions = MiniSearchOptions<SearchDocument>;
 

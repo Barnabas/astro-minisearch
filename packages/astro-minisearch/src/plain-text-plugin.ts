@@ -1,5 +1,5 @@
 import { toText } from "hast-util-to-text";
-import { Root, Element } from "hast-util-to-text/lib/index.js";
+import type { Node, Element } from "hast-util-to-text/lib";
 import { visit } from "unist-util-visit";
 import EmojiRegex from "emoji-regex";
 
@@ -13,7 +13,7 @@ import {
 const emojiRegex = EmojiRegex();
 
 export function toPlaintextTree(
-  tree: Root,
+  tree: Node,
   options: Partial<PluginOptions>
 ): string[][] | string {
   const headingTags = options.headingTags || [];
@@ -62,12 +62,12 @@ export function toPlaintextTree(
   return output.length === 1 && output[0][0] === "" ? output[0][1] : output;
 }
 
-export function plainTextPlugin(options?: Partial<PluginOptions>) {
+export function plainTextPlugin(options: Partial<PluginOptions> = {}) {
   const opts: PluginOptions = pluginOptionValidator.parse(options);
   const contentKey = opts.contentKey;
 
   return function plugin(): AstroRehypePlugin {
-    return (tree: Root, { data }) => {
+    return (tree: Node, { data }) => {
       if (!data || !data.astro || !data.astro.frontmatter) return;
       const frontmatter = data.astro.frontmatter;
       if (frontmatter[contentKey] === undefined) {

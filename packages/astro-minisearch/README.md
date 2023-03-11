@@ -30,8 +30,7 @@ import { plainTextPlugin } from "@barnabask/astro-minisearch";
 export default defineConfig({
   site: "http://example.com",
   markdown: {
-    rehypePlugins: [plainTextPlugin()],
-    extendDefaultPlugins: true,
+    rehypePlugins: [plainTextPlugin()]
   },
 });
 ```
