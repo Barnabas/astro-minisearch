@@ -1,6 +1,6 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { pagesGlobToDocuments } from "../src";
+import { pagesGlobToDocuments, pageToDocuments } from "../src";
 import { GlobResult } from "../src/types";
 
 test("pagesGlobToDocuments defaults", async () => {
@@ -33,6 +33,29 @@ test("pagesGlobToDocuments options", async () => {
   assert.is(docs[0].url, "/abc");
   assert.is(docs[0].title, "letters");
   assert.is(docs[0].text, "bye");
+});
+
+test("pageToDocuments", () => {
+  const contentKey = "plainText";
+  const page = {
+    url: "/xyz",
+    frontmatter: {
+      title: "XYZ",
+      [contentKey]: [
+        ["", "This is the top"],
+        ["Section", "Here is section 1"],
+        ["Section", "Here is section 2"],
+      ],
+    },
+  };
+
+  const docs = pageToDocuments(page, contentKey);
+  assert.is(docs.length, 3);
+  assert.is(docs[0].url, "/xyz");
+  assert.is(docs[0].title, "XYZ");
+  assert.is(docs[0].text, "This is the top");
+  assert.is(docs[1].url, "/xyz#section");
+  assert.is(docs[2].url, "/xyz#section-1");
 });
 
 test.run();

@@ -26,6 +26,7 @@ importers:
     specifiers:
       astro: ^2.1.2
       emoji-regex: ^10.2.1
+      github-slugger: ^2.0.0
       hast-util-from-html: ^1.0.1
       hast-util-to-text: ^3.1.2
       minisearch: ^6.0.1
@@ -36,6 +37,7 @@ importers:
       zod: ^3.21.4
     dependencies:
       emoji-regex: 10.2.1
+      github-slugger: 2.0.0
       hast-util-to-text: 3.1.2
       minisearch: 6.0.1
       unist-util-visit: 4.1.2
