@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 import { fromHtml } from "hast-util-from-html";
-import { toPlaintextTree } from "../src/plain-text-plugin";
+import { toPlaintextTree } from "../src";
 
 const opts = { headingTags: ["h2", "h3"] };
 

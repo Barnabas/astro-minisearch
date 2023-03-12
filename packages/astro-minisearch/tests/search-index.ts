@@ -1,6 +1,6 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { generateIndex, loadIndex } from "../src/search-index";
+import { generateIndex, loadIndex } from "../src/";
 
 test("generateIndex", () => {
   const index = generateIndex([]);
