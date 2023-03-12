@@ -1,5 +1,12 @@
 # @barnabask/astro-minisearch
 
+## 2.0.1
+
+### Patch Changes
+
+- 3a942ee: fix: add slug to pages with headings
+- 31c88a6: fix: make exports more sane
+
 ## 2.0.0
 
 ### Major Changes
