@@ -2,7 +2,7 @@
     "name": "astro-minisearch-monorepo",
     "private": true,
     "scripts": {
-        "ci:build": "pnpm -r run build",
+        "ci:build": "pnpm -r --filter='./packages/*' run build",
         "ci:publish": "pnpm -r --filter='./packages/*' --no-git-checks publish",
         "ci:test": "pnpm -r --filter='./packages/*' run test"
     },
