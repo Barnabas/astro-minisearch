@@ -17,6 +17,7 @@
     "outDir": "./dist",
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true
   },
   "include": ["src"],
   

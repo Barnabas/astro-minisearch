@@ -1,5 +1,7 @@
 # @barnabask/astro-minisearch
 
+[![@barnabask/astro-minisearch](https://img.shields.io/npm/v/@barnabask/astro-minisearch?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/@barnabask/astro-minisearch)
+
 This package adds MiniSearch support to your Astro project.
 It contains a rehype plugin that helps extract text from Markdown and MDX files.
 It also contains helper functions for generating a static JSON search index.
@@ -52,8 +54,8 @@ plainTextPlugin({
 })
 ```
 
-Once the plugin is installed and configured, all of your Markdown pages should have a new frontmatter property.
-You can inspect is using Astro's built in [Debug component](https://docs.astro.build/en/reference/api-reference/#debug-).
+Once the plugin is installed and configured, all Markdown pages and content collections should have a new frontmatter property.
+You can inspect it with Astro's [`<Debug />` component](https://docs.astro.build/en/reference/api-reference/#debug-).
 After configuring this plugin and adding the following line to your page or layout:
 
 ```jsx
@@ -92,16 +94,11 @@ import {
 } from "@barnabask/astro-minisearch";
 
 export async function get() {
-  const articlesCollection = getCollection("articles");
-  const blogCollection = getCollection("blog");
-
-  const [articleDocs, blogDocs, pageDocs] = await Promise.all([
+  return await getSearchIndex([
     pagesGlobToDocuments(import.meta.glob(`./**/*.md*`)),
-    collectionToDocuments(articlesCollection, "/articles/"),
-    collectionToDocuments(blogCollection, "/blog/"),
+    collectionToDocuments(getCollection("articles"), "/articles/"),
+    collectionToDocuments(getCollection("blog"), "/blog/"),
   ]);
-
-  return getSearchIndex([...articleDocs, ...blogDocs, ...pageDocs]);
 }
 ```
 
@@ -113,9 +110,11 @@ There are two arguments:
 1. An array of [`CollectionEntry`] items, which is the resolved output of `getCollection`, and
 2. The absolute root URL where the collection will be rendered
 
-The function `getSearchIndex` outputs search index JSON and takes two arguments:
+The function `getSearchIndex` outputs search index JSON inside an object with a `body` property suitable for outputting an
+[Astro static file endpoint](https://docs.astro.build/en/core-concepts/endpoints/#static-file-endpoints).
+It takes the following two arguments:
 
-1. An array of search documents, and
+1. An array or nested array of promises of search documents, and
 2. [MiniSearch options] (optional)
 
 If, instead of the conversion methods above, you want to manually specify an array of search documents to index,
@@ -132,35 +131,7 @@ This package is only for generating a static search index file when your Astro s
 To actually do the search at runtime, you'll either need some client-side JavaScript or you'll need to enable SSR and render search results on the server.
 
 This package does provide a function called `loadIndex` as a convenience for SSR scenarios.
-Something like this should work:
-
-__`search.astro`__
-
-```jsx
----
-import { loadIndex } from "@barnabask/astro-minisearch";
-import searchData from "./search.json";
-
-const query = Astro.url.searchParams.get("query");
-let results = [];
-
-if (query) {
-  const searchIndex = loadIndex(searchData);
-  results = searchIndex.search(query);
-}
----
-<form action="search" method="GET">
-  <input type="text" name="query" />
-  <button type="submit">Search</button>
-</form>
-<ul>
-  {results.map((result) => (
-    <li>
-      <a href={result.url}>{result.title}</a>
-    </li>
-  ))}
-</ul>
-```
+See the pages and endpoints in [the source code demo directory](https://github.com/Barnabas/astro-minisearch/tree/main/demo/src/pages) for a working example with the standard Astro blog template.
 
 ## Frontmatter
 

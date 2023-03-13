@@ -5,13 +5,13 @@ import {
   collectionToDocuments,
 } from "@barnabask/astro-minisearch";
 
+// make sure this route is static even if SSR is enabled
+export const prerender = true;
+
 export async function get() {
-  const blogCollection = getCollection("blog");
-
-  const [pageDocs, blogDocs] = await Promise.all([
+  // output a combined search index of pages and a content collection
+  return await getSearchIndex([
     pagesGlobToDocuments(import.meta.glob(`./**/*.md*`)),
-    collectionToDocuments(blogCollection, "/blog/"),
+    collectionToDocuments(getCollection("blog"), "/blog/"),
   ]);
-
-  return getSearchIndex([...blogDocs, ...pageDocs]);
 }

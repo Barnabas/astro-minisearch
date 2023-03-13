@@ -1,6 +1,9 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+
+const requestUrl = new URL(Astro.request.url);
+const query = requestUrl.searchParams.get("query");
 ---
 
 <header>
@@ -13,6 +16,10 @@ import { SITE_TITLE } from '../consts';
 		<HeaderLink href="/about">About</HeaderLink>
 		<HeaderLink href="/search.json">search.json</HeaderLink>
 		<HeaderLink href="/docs.json">docs.json</HeaderLink>
+
+		<form action="/search" method="get">
+			<input type="search" name="query" value={query}>
+		</form>
 	</nav>
 </header>
 <style>
@@ -21,5 +28,13 @@ import { SITE_TITLE } from '../consts';
 	}
 	h2 {
 		margin: 0.5em 0;
+	}
+
+	header nav {
+		display: flex;
+	}
+
+	header form {
+		margin-left: auto;
 	}
 </style>

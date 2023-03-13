@@ -1,0 +1,82 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Debug } from "astro/components";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { loadIndex } from "@barnabask/astro-minisearch";
+
+// this only works if SSR is enabled
+
+const requestUrl = new URL(Astro.request.url);
+const query = requestUrl.searchParams.get("query");
+
+const indexUrl = new URL("/search.json", Astro.request.url);
+const fetchJson = await fetch(indexUrl).then((res) => res.json());
+const search = loadIndex(fetchJson);
+const results = query ? search.search(query) : [];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .search-result {
+        margin: 1em 0;
+        padding-bottom: 1em;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .search-result__title {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .search-result__title a {
+        font-weight: bold;
+      }
+
+      .search-result__title span, .search-result__terms {
+        font-style: italic;
+        opacity: 0.7;
+      }
+      
+      .search-result__terms span {
+        font-size:small;
+      }
+
+      .search-result__terms span:not(:last-child)::after {
+        content: ", ";
+      }
+    </style>
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main>
+      <section>
+        <h3>Search Results</h3>
+        {
+          results.map((result) => (
+            <div class="search-result">
+              <div class="search-result__title">
+                <a href={result.id}>{result.title}</a>
+                <span>Score: {result.score.toPrecision(3)}</span>
+              </div>
+              {result.heading && <div>{result.heading}</div>}
+              <div class="search-result__terms">
+                {result.terms.map((term) => (
+                  <span>{term}</span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+        <!--
+         -->
+        <Debug {results} />
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
