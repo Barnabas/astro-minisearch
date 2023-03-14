@@ -1,5 +1,11 @@
 # @barnabask/astro-minisearch
 
+## 2.1.1
+
+### Patch Changes
+
+- 3d971c2: fix API link
+
 ## 2.1.0
 
 ### Minor Changes

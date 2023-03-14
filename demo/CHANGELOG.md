@@ -1,5 +1,12 @@
 # @example/docs
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [3d971c2]
+  - @barnabask/astro-minisearch@2.1.1
+
 ## 0.1.0
 
 ### Minor Changes
