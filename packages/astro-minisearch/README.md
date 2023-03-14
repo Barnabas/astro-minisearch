@@ -6,7 +6,7 @@ This package adds MiniSearch support to your Astro project.
 It contains a rehype plugin that helps extract text from Markdown and MDX files.
 It also contains helper functions for generating  and loading a static JSON search index.
 
-[The complete API documentation is here](./api/README).
+[The complete API documentation is here](./api/README.md).
 
 ## Installation
 
@@ -79,7 +79,7 @@ export async function get() {
 }
 ```
 
-Refer to [the API documentation](./api/README) for more info on
+Refer to [the API documentation](./api/README.md) for more info on
 [`getSearchIndex`](./api/modules/search_index.md#getsearchindex),
 [`pagesGlobToDocuments`](./api/modules/pages.md#pagesglobtodocuments), and
 [`collectionToDocuments`](./api/modules/collections.md#collectiontodocuments).
