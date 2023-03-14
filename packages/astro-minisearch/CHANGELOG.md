@@ -1,5 +1,18 @@
 # @barnabask/astro-minisearch
 
+## 2.1.0
+
+### Minor Changes
+
+- 4c997b5: Allow promises and nested promises in `generateIndex` for better DX.
+  Expose new `getDocuments` function for testing and debugging.
+  Remove duplicates and missing URLs with a warning.
+  Update demo to match new signature and include SSR search page.
+
+### Patch Changes
+
+- 220e3fc: add API documentation
+
 ## 2.0.1
 
 ### Patch Changes
