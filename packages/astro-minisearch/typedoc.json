@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./src/collections.ts",
+    "./src/pages.ts",
+    "./src/plain-text-plugin.ts",
+    "./src/search-index.ts",
+    "./src/types.ts"
+  ],
+  "githubPages": false,
+  "name": "Astro MiniSearch",
+  "out": "api",
+  "readme": "none",
+  "disableSources": true
+}

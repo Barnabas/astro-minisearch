@@ -23,6 +23,10 @@ function slugifyUrl(url: string, heading?: string): string {
   return [url, slugger.slug(heading)].join("#");
 }
 
+/** 
+ * Convert a single page to an array of SearchDocuments.
+ * @ignore 
+ */
 export function pageToDocuments(
   page: Page,
   contentKey: string
@@ -48,6 +52,16 @@ export function pageToDocuments(
   });
 }
 
+/**
+ * Converts glob output of static pages to an array of {@link types!SearchDocument}s.
+ * 
+ * @param pages result of of [`import.meta.glob`](https://vitejs.dev/guide/features.html#glob-import)
+ * @param options plugin options (optional)
+ * @example
+ * ```ts
+ * pagesGlobToDocuments(import.meta.glob('./**\/*.md*'));
+ * ```
+ */
 export async function pagesGlobToDocuments(
   pages: GlobResult,
   options: Partial<PluginOptions> = {}

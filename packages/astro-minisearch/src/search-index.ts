@@ -8,12 +8,21 @@ const optionDefaults: SearchIndexOptions = {
   storeFields: ["title", "heading"],
 };
 
-type SearchDocumentsInput =
+/** 
+ * Represents all possible acceptable inputs for the search documents functions.
+ * This includes an array or nested array of search documents, 
+ * as well as a promise or array of promises that resolve to an array of search documents.  
+ */
+export type SearchDocumentsInput =
   | SearchDocument[]
   | SearchDocument[][]
   | Promise<SearchDocument[]>
   | Promise<SearchDocument[]>[];
 
+/** 
+ * Unravels all possible search inputs and resolve them to a simple array of search documents.
+ * Also removes documents with duplicate or missing URLs and outputs a warning.
+ */
 export async function getDocuments(
   input: SearchDocumentsInput
 ): Promise<SearchDocument[]> {
@@ -25,7 +34,6 @@ export async function getDocuments(
     documents = (await input);
   }
 
-  // remove docs with missing or duplicate URLs
   const docsMap = new Map<string, SearchDocument>();
   let [missing, duplicate] = [0, 0];
   documents.forEach((doc) => {
@@ -45,6 +53,13 @@ export async function getDocuments(
   return Array.from(docsMap.values());
 }
 
+/**
+ * Generate the MiniSearch object from a list of prepared search documents.
+ * 
+ * @param documentsInput search documents or promises from other functions
+ * @param options search index options
+ * @returns a populated MiniSearch object
+ */
 export async function generateIndex(
   documentsInput: SearchDocumentsInput,
   options?: SearchIndexOptions
@@ -56,6 +71,7 @@ export async function generateIndex(
   return miniSearch;
 }
 
+/** Load a MiniSearch object from a string or JSON object. */
 export function loadIndex(json: string | any, options?: SearchIndexOptions) {
   const opts: SearchIndexOptions = { ...optionDefaults, ...options };
   if (typeof json === "string") {
@@ -64,6 +80,10 @@ export function loadIndex(json: string | any, options?: SearchIndexOptions) {
   return MiniSearch.loadJS(json, opts);
 }
 
+/** 
+ * Helper function to both generate an index and output a static endpoint. 
+ * @see [Astro docs on static endpoints]()
+*/
 export async function getSearchIndex(
   documentsInput: SearchDocumentsInput,
   options?: SearchIndexOptions

@@ -1,10 +1,9 @@
 import { toText } from "hast-util-to-text";
-import type { Node, Element } from "hast-util-to-text/lib";
+import type { Root, Node, Element } from "hast-util-to-text/lib";
 import { visit } from "unist-util-visit";
 import EmojiRegex from "emoji-regex";
 
 import {
-  AstroRehypePlugin,
   PluginOptions,
   Section,
   pluginOptionValidator,
@@ -12,6 +11,16 @@ import {
 
 const emojiRegex = EmojiRegex();
 
+type AstroVFile = {
+  data: { astro: { frontmatter: Record<string, any> } };
+}
+
+type AstroRehypePlugin = (tree: Root, file: AstroVFile) => void;
+
+/** 
+ * Core logic of plainTextPlugin, separated for testing
+ * @ignore 
+ */
 export function toPlaintextTree(
   tree: Node,
   options: Partial<PluginOptions>
@@ -62,6 +71,12 @@ export function toPlaintextTree(
   return output.length === 1 && output[0][0] === "" ? output[0][1] : output;
 }
 
+/**
+ * A helper to extract plain text from rendered HTML and add it to Astro frontmatter.
+ * 
+ * @param options plugin options
+ * @returns a rehype plugin suitable for Astro
+ */
 export function plainTextPlugin(options: Partial<PluginOptions> = {}) {
   const opts: PluginOptions = pluginOptionValidator.parse(options);
   const contentKey = opts.contentKey;

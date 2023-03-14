@@ -4,24 +4,19 @@
 
 This package adds MiniSearch support to your Astro project.
 It contains a rehype plugin that helps extract text from Markdown and MDX files.
-It also contains helper functions for generating a static JSON search index.
+It also contains helper functions for generating  and loading a static JSON search index.
+
+[The complete API documentation is here](./api/README).
 
 ## Installation
 
-A more automatic installation using the Astro CLI is not yet available.
-In the meantime, manual installation steps below.
-
-Add the `astro-minisearch` package like so:
+Add the package to your project:
 
 ```sh
 npm install @barnabask/astro-minisearch
 ```
 
-### Configuring the plaintext plugin
-
-The plaintext Rehype plugin can populate a frontmatter property of each Markdown page with a plaintext version of the the final content.
-You can skip this if you want, but then you'll have to manually update the frontmatter yourself.
-Adjust your `astro.config.*` file as follows:
+Adjust your `astro.config.*` file to add `plainTextPlugin` to `rehypePlugins` as follows:
 
 __`astro.config.mjs`__
 
@@ -35,23 +30,6 @@ export default defineConfig({
     rehypePlugins: [plainTextPlugin()]
   },
 });
-```
-
-Double check that you added it to `rehypePlugins` and not `remarkPlugins`.
-Also be sure that you added it as a function call with parentheses like `plainTextPlugin()`, not `plainTextPlugin`.
-It is possible to supply options to the plugin like this (default values shown):
-
-```js
-plainTextPlugin({
-  // Frontmatter property to store plain text output.
-  contentKey: "plainText";
-
-  // If true, strip emoji out of text.
-  removeEmoji: true;
-
-  // Tags to consider headings and make separate search documents.
-  headingTags: ["h2", "h3"]; 
-})
 ```
 
 Once the plugin is installed and configured, all Markdown pages and content collections should have a new frontmatter property.
@@ -81,9 +59,8 @@ Configuration success! Congratulations.
 
 ### Generating a search index
 
-Create a `search.json.js` file under your `src/pages/` directory.
-The output page will be called `search.json` but you can rename it or move it if you want.
-Here's an example that fetches local static markdown files and two Astro content collections and then outputs a search index:
+Create a JSON endpoint file under your `src/pages/` directory named `search.json.js` or similar.
+This example adds local static markdown files and two Astro content collections to a search index:
 
 ```js
 import { getCollection } from "astro:content";
@@ -102,28 +79,10 @@ export async function get() {
 }
 ```
 
-The function `pagesGlobToDocuments` converts a the output of [`import.meta.glob`] to search documents.
-
-The function `collectionToDocuments` converts a the output of [`getCollection`] to search documents.
-There are two arguments:
-
-1. An array of [`CollectionEntry`] items, which is the resolved output of `getCollection`, and
-2. The absolute root URL where the collection will be rendered
-
-The function `getSearchIndex` outputs search index JSON inside an object with a `body` property suitable for outputting an
-[Astro static file endpoint](https://docs.astro.build/en/core-concepts/endpoints/#static-file-endpoints).
-It takes the following two arguments:
-
-1. An array or nested array of promises of search documents, and
-2. [MiniSearch options] (optional)
-
-If, instead of the conversion methods above, you want to manually specify an array of search documents to index,
-be sure to specify at least the properties `url`, `title`, and `text` field for each item.
-
-[`import.meta.glob`]: https://vitejs.dev/guide/features.html#glob-import
-[`getCollection`]: https://docs.astro.build/en/reference/api-reference/#getcollection
-[`CollectionEntry`]: https://docs.astro.build/en/reference/api-reference/#collection-entry-type
-[MiniSearch options]: https://lucaong.github.io/minisearch/modules/_minisearch_.html#options
+Refer to [the API documentation](./api/README) for more info on
+[`getSearchIndex`](./api/modules/search_index.md#getsearchindex),
+[`pagesGlobToDocuments`](./api/modules/pages.md#pagesglobtodocuments), and
+[`collectionToDocuments`](./api/modules/collections.md#collectiontodocuments).
 
 ## Next steps
 
@@ -131,7 +90,7 @@ This package is only for generating a static search index file when your Astro s
 To actually do the search at runtime, you'll either need some client-side JavaScript or you'll need to enable SSR and render search results on the server.
 
 This package does provide a function called `loadIndex` as a convenience for SSR scenarios.
-See the pages and endpoints in [the source code demo directory](https://github.com/Barnabas/astro-minisearch/tree/main/demo/src/pages) for a working example with the standard Astro blog template.
+See the pages and endpoints in [the source code demo directory](../../demo/src/pages/) for a working example with the standard Astro blog template.
 
 ## Frontmatter
 
